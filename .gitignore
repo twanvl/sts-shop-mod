@@ -1,0 +1,10 @@
+dependency-reduced-pom.xml
+.classpath
+.factorypath
+.project
+.settings
+.vscode
+target
+src/main/resources/img/relics/*.png
+src/main/resources/img/relics/outline
+src/main/resources/img/shop/develop
