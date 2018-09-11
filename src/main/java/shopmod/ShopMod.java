@@ -52,17 +52,3 @@ public class ShopMod implements
     }
 }
 
-/*
-TODO's:
-1.
- * Drawing for sale sign
- * remove shop rug
- * remove merchants rug
-2.
- * sell potions ui
- * sell potions money back thing
-   * where to store prices?
-3.
- * sell relics ui
-   (AbstractRelic.updateRelicPopupClick())
-*/
