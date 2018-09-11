@@ -3,7 +3,7 @@
   "name": "Shop Mod",
   "author_list": ["twanvl"],
   "description": "Modifies the merchant's shop, allowing you to buy more items.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "sts_version": "08-30-2018",
   "mts_version": "3.0.0",
   "dependencies": ["basemod"],
