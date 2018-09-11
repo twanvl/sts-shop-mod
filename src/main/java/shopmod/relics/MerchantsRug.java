@@ -119,6 +119,15 @@ public class MerchantsRug extends CustomRelic {
 
     // For use in ShopScreen
 
+    private static Texture SHOP_NO_RUG_IMG;
+
+    public static Texture getShopNoRugImage() {
+        if (SHOP_NO_RUG_IMG == null) {
+            SHOP_NO_RUG_IMG = ImageMaster.loadImage("img/shop/noRug.png");
+        }
+        return SHOP_NO_RUG_IMG;
+    }
+
     public static void initRugForShopScreen() {
         initSalePrices();
         if (AbstractDungeon.player.hasRelic(ID)) {

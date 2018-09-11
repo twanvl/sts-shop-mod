@@ -125,7 +125,9 @@ public class RelicPopUp {
             this.hbTop.render(sb);
             this.hbBot.render(sb);
             if (this.hbBot.hovered) {
-                TipHelper.renderGenericTip(this.x + 124.0f * Settings.scale, this.y + 50.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + MerchantsRug.relicSalePrice(relic) + SELL_MESSAGE[1]);
+                if (MerchantsRug.canSell(relic)) {
+                    TipHelper.renderGenericTip(this.x + 124.0f * Settings.scale, this.y + 50.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + MerchantsRug.relicSalePrice(relic) + SELL_MESSAGE[1]);
+                }
             }
         }
     }

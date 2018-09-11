@@ -24,6 +24,8 @@ import javassist.expr.MethodCall;
 import shopmod.relics.MerchantsRug;
 
 public class ShopScreenPatch {
+    public static final boolean REPLACEMENT_RUG_IMAGE = true;
+
     @SpirePatch(clz = ShopScreen.class, method = "initRelics")
     public static class InitRelics {
         public static void Postfix(ShopScreen self) {
@@ -52,9 +54,9 @@ public class ShopScreenPatch {
                 if (MerchantsRug.rugHb.hovered) {
                     ReflectionHacks.setPrivate(self,ShopScreen.class,"somethingHovered",true);
                     self.moveHand(MerchantsRug.rugHb.cX - 210.0f * Settings.scale, MerchantsRug.rugHb.cY - 70.0f);
-                    MerchantsRug.forSaleScale = Settings.scale * 1.25f;
+                    MerchantsRug.forSaleScale = 1.25f; // Note: don't combine with Settings.scale, do that in render code
                 } else {
-                    MerchantsRug.forSaleScale = MathHelper.scaleLerpSnap(MerchantsRug.forSaleScale, Settings.scale);
+                    MerchantsRug.forSaleScale = MathHelper.scaleLerpSnap(MerchantsRug.forSaleScale, 1.0f);
                 }
                 if (MerchantsRug.rugHb.hovered && InputHelper.justClickedRight) {
                     AbstractRelic relic = RelicLibrary.getRelic(MerchantsRug.ID);
@@ -96,7 +98,16 @@ public class ShopScreenPatch {
                 public void edit(MethodCall m) throws CannotCompileException {
                     if (m.getMethodName().equals("draw") && first) {
                         first = false;
-                        m.replace("if (!com.megacrit.cardcrawl.dungeons.AbstractDungeon.player.hasRelic(shopmod.relics.MerchantsRug.ID)) { $_ = $proceed($$); }");
+                        if (REPLACEMENT_RUG_IMAGE) {
+                            m.replace(
+                                "if (com.megacrit.cardcrawl.dungeons.AbstractDungeon.player.hasRelic(shopmod.relics.MerchantsRug.ID)) {" +
+                                "    sb.draw(shopmod.relics.MerchantsRug.getShopNoRugImage(), 0.0f, this.rugY, (float)com.megacrit.cardcrawl.core.Settings.WIDTH, (float)com.megacrit.cardcrawl.core.Settings.HEIGHT); " +
+                                "} else {" +
+                                "    $_ = $proceed($$); " +
+                                "}");
+                        } else {
+                            m.replace("if (!com.megacrit.cardcrawl.dungeons.AbstractDungeon.player.hasRelic(shopmod.relics.MerchantsRug.ID)) { $_ = $proceed($$); }");
+                        }
                     }
                 }
             };
@@ -115,7 +126,7 @@ public class ShopScreenPatch {
                 float rugY = (float)ReflectionHacks.getPrivate(self, ShopScreen.class, "rugY");
                 final float FOR_SALE_SCALE_Y = 1080.f/1136.f; // The rug image has height 1136, but the screen has heihght 1080
                 final float FOR_SALE_IMG_X = 1772.0f * Settings.scale;
-                final float FOR_SALE_IMG_Y = 651.f * FOR_SALE_SCALE_Y;
+                final float FOR_SALE_IMG_Y = 651.f * FOR_SALE_SCALE_Y * Settings.scale;
                 final int FOR_SALE_IMG_WIDTH = 122;
                 final int FOR_SALE_IMG_HEIGHT = 168;
                 final float SALE_TAG_PRICE_X = 1825.0f * Settings.scale;
@@ -129,7 +140,13 @@ public class ShopScreenPatch {
                     rugForSaleImg = ImageMaster.loadImage("img/shop/rugForSaleTag.png");
                 }
                 sb.setColor(Color.WHITE);
-                sb.draw(rugForSaleImg, FOR_SALE_IMG_X, rugY + FOR_SALE_IMG_Y, 15.f, FOR_SALE_IMG_HEIGHT/2, FOR_SALE_IMG_WIDTH, FOR_SALE_IMG_HEIGHT * FOR_SALE_SCALE_Y, MerchantsRug.forSaleScale, MerchantsRug.forSaleScale, 0.f, 0, 0, FOR_SALE_IMG_WIDTH, FOR_SALE_IMG_HEIGHT, false, false);
+                // Note: sb.draw with scale is fundamentally broken when putting Settings.scale into the forSaleScale,
+                // because the code uses both scaled and unscaled coordinates together.
+                // Note: the fix would be to use
+                //   float worldOriginX = x + originX;
+                // instead of
+                //   float worldOriginX = x + originX * scale;
+                sb.draw(rugForSaleImg, FOR_SALE_IMG_X, rugY + FOR_SALE_IMG_Y, 16.f * Settings.scale, FOR_SALE_IMG_HEIGHT/2 * Settings.scale, FOR_SALE_IMG_WIDTH * Settings.scale, FOR_SALE_IMG_HEIGHT * FOR_SALE_SCALE_Y * Settings.scale, MerchantsRug.forSaleScale, MerchantsRug.forSaleScale, 0.f, 0, 0, FOR_SALE_IMG_WIDTH, FOR_SALE_IMG_HEIGHT, false, false);
                 // price
                 sb.setColor(Color.WHITE);
                 sb.draw(ImageMaster.UI_GOLD, SALE_TAG_PRICE_X + RELIC_GOLD_OFFSET_X, rugY + SALE_TAG_PRICE_Y + RELIC_GOLD_OFFSET_Y, GOLD_IMG_WIDTH, GOLD_IMG_WIDTH);
