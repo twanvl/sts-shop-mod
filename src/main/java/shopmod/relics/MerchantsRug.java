@@ -51,9 +51,10 @@ public class MerchantsRug extends CustomRelic {
     public static Hitbox rugHb = new Hitbox(1784.f * Settings.scale, Settings.HEIGHT - 445.f * Settings.scale, 105.f * Settings.scale, 150.f * Settings.scale);
     // Selling items
     public static float POTION_SALE_PRICE_MULTIPLIER = 0.33f;
-    public static float RELIC_SALE_PRICE_MULTIPLIER = 0.2f;
+    public static float RELIC_SALE_PRICE_MULTIPLIER = 0.25f;
     public static float PICKUP_RELIC_SALE_PRICE_MULTIPLIER = 0.1f;
     public static boolean CAN_SELL_SPECIAL_RELICS = true;
+    public static boolean CAN_SELL_MERCHANTS_RUG = false;
 
     public MerchantsRug() {
         super(ID, ImageMaster.loadImage("img/relics/MerchantsRug.png"), ImageMaster.loadImage("img/relics/outline/MerchantsRug.png"), AbstractRelic.RelicTier.SPECIAL, AbstractRelic.LandingSound.FLAT);
@@ -205,10 +206,18 @@ public class MerchantsRug extends CustomRelic {
 
     private static int initSalePrice(AbstractRelic relic) {
         if (!isSellable(relic)) return -1;
-        if (isPickupRelic(relic)) {
-            return MathUtils.round(relic.getPrice() * PICKUP_RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
+        int basePrice;
+        if (relic.tier == AbstractRelic.RelicTier.BOSS) {
+            basePrice = 500; // the base game values these at 999, which is a bit much
+        } else if (relic.tier == AbstractRelic.RelicTier.SPECIAL) {
+            basePrice = 200; // special relics are not that good, and can even be bad
         } else {
-            return MathUtils.round(relic.getPrice() * RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
+            basePrice = relic.getPrice();
+        }
+        if (isPickupRelic(relic)) {
+            return MathUtils.round(basePrice * PICKUP_RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
+        } else {
+            return MathUtils.round(basePrice * RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
         }
     }
     public static int relicSalePrice(AbstractRelic relic) {
@@ -256,6 +265,9 @@ public class MerchantsRug extends CustomRelic {
             case BottledLightning.ID:
             case BottledTornado.ID: {
                 return false;
+            }
+            case MerchantsRug.ID: {
+                return CAN_SELL_MERCHANTS_RUG;
             }
             default: {
                 if (relic.tier == RelicTier.SPECIAL) {
