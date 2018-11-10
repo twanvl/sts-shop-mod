@@ -83,8 +83,10 @@ public class RelicPopUp {
             InputHelper.justClickedLeft = false;
             if (this.hbTop.hovered) {
                 this.hbTop.clickStarted = true;
+                InputHelper.justClickedLeft = false; // Don't propagate click to things below
             } else if (this.hbBot.hovered) {
                 this.hbBot.clickStarted = true;
+                InputHelper.justClickedLeft = false;
             } else {
                 this.close();
             }
@@ -93,11 +95,15 @@ public class RelicPopUp {
             CInputActionSet.select.unpress();
             this.hbTop.clicked = false;
             CardCrawlGame.relicPopup.open(relic, AbstractDungeon.player.relics);
+            CInputActionSet.select.unpress();
+            InputHelper.justClickedLeft = false;
             this.close();
         } else if ((this.hbBot.clicked || this.hbBot.hovered && CInputActionSet.select.isJustPressed()) && MerchantsRug.canSell(relic)) {
             CInputActionSet.select.unpress();
             this.hbBot.clicked = false;
             MerchantsRug.sell(relic);
+            CInputActionSet.select.unpress();
+            InputHelper.justClickedLeft = false;
             this.close();
         }
         if (this.hbTop.hovered) {

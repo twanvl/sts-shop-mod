@@ -3,8 +3,8 @@
   "name": "Shop Mod",
   "author_list": ["twanvl"],
   "description": "Modifies the merchant's shop, allowing you to buy more items.",
-  "version": "1.0.1",
-  "sts_version": "08-30-2018",
+  "version": "1.0.2",
+  "sts_version": "10-25-2018",
   "mts_version": "3.0.0",
   "dependencies": ["basemod"],
   "update_json": "https://api.github.com/repos/twanvl/sts-shop-mod/releases/latest"

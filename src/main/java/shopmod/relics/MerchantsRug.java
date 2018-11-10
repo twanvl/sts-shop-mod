@@ -36,7 +36,9 @@ import com.megacrit.cardcrawl.relics.WarPaint;
 import com.megacrit.cardcrawl.relics.Whetstone;
 import com.megacrit.cardcrawl.ui.panels.PotionPopUp;
 
+import basemod.ReflectionHacks;
 import basemod.abstracts.CustomRelic;
+import basemod.patches.com.megacrit.cardcrawl.ui.panels.TopPanel.TopPanelPatches;
 import shopmod.screens.RelicPopUp;
 
 public class MerchantsRug extends CustomRelic {
@@ -156,7 +158,19 @@ public class MerchantsRug extends CustomRelic {
     // Selling things when having the rug
 
     public static boolean isSelling() {
-        return AbstractDungeon.isScreenUp && AbstractDungeon.screen == AbstractDungeon.CurrentScreen.SHOP && AbstractDungeon.player.hasRelic(ID);
+        return AbstractDungeon.isScreenUp && isShopScreenUp() && AbstractDungeon.player.hasRelic(ID);
+    }
+    private static boolean isShopScreenUp() {
+        if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.SHOP) {
+            return true;
+        } else if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.COMBAT_REWARD) {
+            // This is to work around a hack from BaseMod, where TopPanel.render is patched to change AbstractDungeon.screen
+            // the actual screen is stored in a private variable
+            AbstractDungeon.CurrentScreen savedScreen = (AbstractDungeon.CurrentScreen)ReflectionHacks.getPrivateStatic(TopPanelPatches.RenderPatch.class, "saveScreen");
+            return savedScreen == AbstractDungeon.CurrentScreen.SHOP;
+        } else {
+            return false;
+        }
     }
 
     public static void initSalePrices() {
@@ -187,9 +201,15 @@ public class MerchantsRug extends CustomRelic {
         return MathUtils.round(potion.getPrice() * POTION_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
     }
     public static int potionSalePrice(int slot, AbstractPotion potion) {
-        if (slot < 0 || slot >= sellingPotions.size()) return -1;
-        if (sellingPotions.get(slot) == null) return -1;
-        if (sellingPotions.get(slot).potion != potion) return -1;
+        // update sale prices if they are out of date
+        if (slot < 0) return -1;
+        if (slot >= sellingPotions.size()) {
+            for (int i = sellingPotions.size() ; i < AbstractDungeon.player.potions.size() ; ++i) {
+                sellingPotions.add(new SellingPotion(AbstractDungeon.player.potions.get(i)));
+            }
+        } else if (sellingPotions.get(slot) == null || sellingPotions.get(slot).potion != potion) {
+            sellingPotions.set(slot,new SellingPotion(potion));
+        }
         return sellingPotions.get(slot).price;
     }
     public static boolean canSell(int slot, AbstractPotion potion) {

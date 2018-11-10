@@ -44,6 +44,11 @@ public class ShopScreenPatch {
 
     @SpirePatch(clz = ShopScreen.class, method = "update")
     public static class Update {
+        public static void Prefix(ShopScreen self) {
+            // Note: do this before ShopScreen.updateCards, to make it possible to cancel clicks
+            MerchantsRug.relicPopUp.update();
+        }
+
         public static void Postfix(ShopScreen self) {
             if (MerchantsRug.forSale) {
                 float rugY = (float)ReflectionHacks.getPrivate(self, ShopScreen.class, "rugY");
@@ -84,7 +89,6 @@ public class ShopScreenPatch {
                     }
                 }
             }
-            MerchantsRug.relicPopUp.update();
         }
     }
 
