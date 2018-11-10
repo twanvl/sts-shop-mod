@@ -30,6 +30,8 @@ public class RelicPopUp {
     private static final String INFO_LABEL = "Inspect";
     private static final String SELL_LABEL = "Sell";
     public static final String[] SELL_MESSAGE = {"Sell this relic NL Obtain #b", " #ygold"};
+    private static final String CANT_SELL_LABEL = "Can't sell";
+    public static final String[] CANT_SELL_MESSAGE = {"This relic can not be sold."};
 
     public void open(AbstractRelic relic) {
         AbstractDungeon.topPanel.selectPotionMode = false;
@@ -133,6 +135,8 @@ public class RelicPopUp {
             if (this.hbBot.hovered) {
                 if (MerchantsRug.canSell(relic)) {
                     TipHelper.renderGenericTip(this.x + 124.0f * Settings.scale, this.y + 50.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + MerchantsRug.relicSalePrice(relic) + SELL_MESSAGE[1]);
+                } else {
+                    TipHelper.renderGenericTip(this.x + 124.0f * Settings.scale, this.y + 50.0f * Settings.scale, CANT_SELL_LABEL, CANT_SELL_MESSAGE[0]);
                 }
             }
         }

@@ -18,6 +18,7 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Astrolabe;
+import com.megacrit.cardcrawl.relics.BloodyIdol;
 import com.megacrit.cardcrawl.relics.BottledFlame;
 import com.megacrit.cardcrawl.relics.BottledLightning;
 import com.megacrit.cardcrawl.relics.BottledTornado;
@@ -25,14 +26,23 @@ import com.megacrit.cardcrawl.relics.CallingBell;
 import com.megacrit.cardcrawl.relics.Cauldron;
 import com.megacrit.cardcrawl.relics.DollysMirror;
 import com.megacrit.cardcrawl.relics.EmptyCage;
+import com.megacrit.cardcrawl.relics.Enchiridion;
+import com.megacrit.cardcrawl.relics.GoldenIdol;
 import com.megacrit.cardcrawl.relics.Mango;
+import com.megacrit.cardcrawl.relics.Necronomicon;
+import com.megacrit.cardcrawl.relics.NilrysCodex;
+import com.megacrit.cardcrawl.relics.NlothsGift;
+import com.megacrit.cardcrawl.relics.OddMushroom;
 import com.megacrit.cardcrawl.relics.OldCoin;
 import com.megacrit.cardcrawl.relics.Orrery;
 import com.megacrit.cardcrawl.relics.Pear;
 import com.megacrit.cardcrawl.relics.PotionBelt;
+import com.megacrit.cardcrawl.relics.RedMask;
+import com.megacrit.cardcrawl.relics.SpiritPoop;
 import com.megacrit.cardcrawl.relics.TinyHouse;
 import com.megacrit.cardcrawl.relics.Waffle;
 import com.megacrit.cardcrawl.relics.WarPaint;
+import com.megacrit.cardcrawl.relics.WarpedTongs;
 import com.megacrit.cardcrawl.relics.Whetstone;
 import com.megacrit.cardcrawl.ui.panels.PotionPopUp;
 
@@ -54,8 +64,8 @@ public class MerchantsRug extends CustomRelic {
     // Selling items
     public static float POTION_SALE_PRICE_MULTIPLIER = 0.33f;
     public static float RELIC_SALE_PRICE_MULTIPLIER = 0.25f;
-    public static float PICKUP_RELIC_SALE_PRICE_MULTIPLIER = 0.1f;
-    public static boolean CAN_SELL_SPECIAL_RELICS = true;
+    public static float PICKUP_RELIC_SALE_PRICE_MULTIPLIER = 0.25f;
+    public static boolean CAN_SELL_SPECIAL_RELICS = false;
     public static boolean CAN_SELL_MERCHANTS_RUG = false;
 
     public MerchantsRug() {
@@ -234,39 +244,42 @@ public class MerchantsRug extends CustomRelic {
     static HashMap<AbstractRelic,SellingRelic> sellingRelics = new HashMap<>();
 
     private static int initSalePrice(AbstractRelic relic) {
-        if (!isSellable(relic)) return -1;
-        int basePrice;
-        if (relic.tier == AbstractRelic.RelicTier.BOSS) {
+        // Base price based on tier
+        float basePrice;
+        if (relic.relicId == SpiritPoop.ID) {
+            basePrice = 1;
+        } else if (relic.tier == AbstractRelic.RelicTier.BOSS) {
             basePrice = 500; // the base game values these at 999, which is a bit much
         } else if (relic.tier == AbstractRelic.RelicTier.SPECIAL) {
             basePrice = 200; // special relics are not that good, and can even be bad
         } else {
             basePrice = relic.getPrice();
         }
-        if (isPickupRelic(relic)) {
-            return MathUtils.round(basePrice * PICKUP_RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
-        } else {
-            return MathUtils.round(basePrice * RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
-        }
-    }
-    public static int relicSalePrice(AbstractRelic relic) {
-        SellingRelic sale = sellingRelics.get(relic);
-        if (sale == null) return -1;
-        return sale.price;
-    }
-    public static boolean canSell(AbstractRelic relic) {
-        return isSelling() && relic.isObtained && isSellable(relic) && relicSalePrice(relic) > 0;
-    }
-    public static void sell(AbstractRelic relic) {
-        if (AbstractDungeon.player.loseRelic(relic.relicId)) {
-            CardCrawlGame.sound.play("SHOP_PURCHASE");
-            AbstractDungeon.player.gainGold(relicSalePrice(relic));
-        }
-    }
-
-    // Relic with on-pickup effects have lower prices
-    public static boolean isPickupRelic(AbstractRelic relic) {
+        // Some can not be sold or have a special price
         switch (relic.relicId) {
+            case MerchantsRug.ID: {
+                if (!CAN_SELL_MERCHANTS_RUG) return -1;
+                break;
+            }
+            case SpiritPoop.ID: {
+                basePrice = 1;
+                break;
+            }
+            case Necronomicon.ID:
+            case NilrysCodex.ID:
+            case Enchiridion.ID:
+            case WarpedTongs.ID:
+            case NlothsGift.ID:
+            case GoldenIdol.ID:
+            case BloodyIdol.ID:
+            case OddMushroom.ID:
+            case RedMask.ID: {
+                break; // sellable event relics, other event relics are not sellable
+            }
+            case "hubris:BottledHeart": {
+                basePrice = 999;
+                break;
+            }
             case Astrolabe.ID:
             case CallingBell.ID:
             case Cauldron.ID:
@@ -280,30 +293,32 @@ public class MerchantsRug extends CustomRelic {
             case TinyHouse.ID:
             case Waffle.ID:
             case WarPaint.ID:
-            case Whetstone.ID:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    public static boolean isSellable(AbstractRelic relic) {
-        // Bottle relics can not be sold
-        switch (relic.relicId) {
-            case BottledFlame.ID:
-            case BottledLightning.ID:
-            case BottledTornado.ID: {
-                return false;
-            }
-            case MerchantsRug.ID: {
-                return CAN_SELL_MERCHANTS_RUG;
+            case Whetstone.ID: {
+                // relics with an effect only on pickup are worth less
+                basePrice *= PICKUP_RELIC_SALE_PRICE_MULTIPLIER;
             }
             default: {
-                if (relic.tier == RelicTier.SPECIAL) {
-                    return CAN_SELL_SPECIAL_RELICS; // Don't sell event relics
+                if (relic.tier == RelicTier.SPECIAL && !CAN_SELL_SPECIAL_RELICS) {
+                    return -1; // Don't sell event relics
                 }
-                return true;
             }
+        }
+        // unsellable?
+        if (basePrice <= 0) return -1;
+        return MathUtils.round(basePrice * RELIC_SALE_PRICE_MULTIPLIER * AbstractDungeon.merchantRng.random(0.95f, 1.05f));
+    }
+    public static int relicSalePrice(AbstractRelic relic) {
+        SellingRelic sale = sellingRelics.get(relic);
+        if (sale == null) return -1;
+        return sale.price;
+    }
+    public static boolean canSell(AbstractRelic relic) {
+        return isSelling() && relic.isObtained && relicSalePrice(relic) > 0;
+    }
+    public static void sell(AbstractRelic relic) {
+        if (AbstractDungeon.player.loseRelic(relic.relicId)) {
+            CardCrawlGame.sound.play("SHOP_PURCHASE");
+            AbstractDungeon.player.gainGold(relicSalePrice(relic));
         }
     }
 
