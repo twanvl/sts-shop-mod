@@ -4,7 +4,7 @@ Modifies the merchant's shop, allowing you to buy more items.
 
 ## Requirements ##
 * Slay the Spire
-* ModTheSpire v3.0.0 or newer (https://github.com/t-larson/ModTheSpire/releases)
+* ModTheSpire v3.0.0 or newer (https://github.com/kiooeht/ModTheSpire/releases)
 * BaseMod v3.0.0 or newer (https://github.com/daviscook477/BaseMod/releases)
 * Java 8+
 
