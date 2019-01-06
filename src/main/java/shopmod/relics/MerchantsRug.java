@@ -316,6 +316,7 @@ public class MerchantsRug extends CustomRelic {
         if (AbstractDungeon.player.loseRelic(relic.relicId)) {
             CardCrawlGame.sound.play("SHOP_PURCHASE");
             AbstractDungeon.player.gainGold(relicSalePrice(relic));
+            AbstractDungeon.topPanel.adjustRelicHbs();
         }
     }
 
