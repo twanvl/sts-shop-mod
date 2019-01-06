@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -44,9 +45,11 @@ public class ShopScreenPatch {
 
     @SpirePatch(clz = ShopScreen.class, method = "update")
     public static class Update {
-        public static void Prefix(ShopScreen self) {
+        public static SpireReturn Prefix(ShopScreen self) {
             // Note: do this before ShopScreen.updateCards, to make it possible to cancel clicks
             MerchantsRug.relicPopUp.update();
+            // Note: when the relicPopup is shown, don't do any other updates
+            return MerchantsRug.relicPopUp.isHidden ? SpireReturn.Continue() : SpireReturn.Return(null);
         }
 
         public static void Postfix(ShopScreen self) {
