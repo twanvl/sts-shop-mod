@@ -36,8 +36,8 @@ public class RelicPopUp {
     public void open(AbstractRelic relic) {
         AbstractDungeon.topPanel.selectPotionMode = false;
         this.relic = relic;
-        this.x = relic.currentX;
-        this.y = (float)Settings.HEIGHT - 246.0f * Settings.scale;
+        this.x = relic.hb.cX;
+        this.y = relic.hb.cY - 144.0f * Settings.scale;
         this.isHidden = false;
         this.hbTop.move(this.x, this.y + 44.0f * Settings.scale);
         this.hbBot.move(this.x, this.y - 14.0f * Settings.scale);
