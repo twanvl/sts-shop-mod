@@ -27,11 +27,11 @@ public class RelicPopUp {
     private Hitbox hbBot = new Hitbox(HB_W, HB_H);
     private float x;
     private float y;
-    private static final String INFO_LABEL = "Inspect";
-    private static final String SELL_LABEL = "Sell";
-    public static final String[] SELL_MESSAGE = {"Sell this relic NL Obtain #b", " #ygold"};
-    private static final String CANT_SELL_LABEL = "Can't sell";
-    public static final String[] CANT_SELL_MESSAGE = {"This relic can not be sold."};
+    private static final String INFO_LABEL = "检查";
+    private static final String SELL_LABEL = "卖出";
+    public static final String[] SELL_MESSAGE = {"卖出这件遗物 NL 获得 #b", " #y金币"};
+    private static final String CANT_SELL_LABEL = "不能卖出";
+    public static final String[] CANT_SELL_MESSAGE = {"这件遗物不能被卖出。"};
 
     public void open(AbstractRelic relic) {
         AbstractDungeon.topPanel.selectPotionMode = false;
