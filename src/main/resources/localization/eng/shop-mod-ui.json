@@ -1,0 +1,17 @@
+{
+  "shopmod:PotionPopUp": {
+    "TEXT": [
+      "Sell",
+      "Sell this potion NL Obtain #b", " #ygold"
+    ]
+  },
+  "shopmod:RelicPopUp": {
+    "TEXT": [
+      "Inspect",
+      "Sell",
+      "Sell this relic NL Obtain #b", " #ygold",
+      "Can't sell",
+      "This relic can not be sold."
+    ]
+  }
+}

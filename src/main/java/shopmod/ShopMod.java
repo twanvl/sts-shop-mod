@@ -5,7 +5,9 @@ import java.nio.charset.StandardCharsets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
+import com.megacrit.cardcrawl.localization.UIStrings;
 
 import basemod.BaseMod;
 import basemod.helpers.RelicType;
@@ -44,11 +46,18 @@ public class ShopMod implements
 
     @Override
     public void receiveEditStrings() {
-        // Note: it seems that naming the files localization/eng/relics.json crashes slay the spire on startup
-        BaseMod.loadCustomStrings(RelicStrings.class, loadJson("localization/eng/shop-mod-relics.json"));
+        String lang = getSupportedLanguage();
+        BaseMod.loadCustomStrings(RelicStrings.class, loadJson("localization/"+lang+"/shop-mod-relics.json"));
+        BaseMod.loadCustomStrings(UIStrings.class, loadJson("localization/"+lang+"/shop-mod-ui.json"));
     }
     private static String loadJson(String jsonPath) {
         return Gdx.files.internal(jsonPath).readString(String.valueOf(StandardCharsets.UTF_8));
+    }
+    public static String getSupportedLanguage() {
+        switch (Settings.language) {
+            default:
+                return "eng";
+        }
     }
 }
 

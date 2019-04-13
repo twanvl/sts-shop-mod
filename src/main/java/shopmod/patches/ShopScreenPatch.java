@@ -22,6 +22,7 @@ import basemod.ReflectionHacks;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
+import shopmod.ShopMod;
 import shopmod.relics.MerchantsRug;
 
 public class ShopScreenPatch {
@@ -144,7 +145,8 @@ public class ShopScreenPatch {
                 final float RELIC_PRICE_OFFSET_Y = -62.0f * Settings.scale;
                 final float GOLD_IMG_WIDTH = (float)ImageMaster.UI_GOLD.getWidth() * Settings.scale;
                 if (rugForSaleImg == null) {
-                    rugForSaleImg = ImageMaster.loadImage("img/shop/rugForSaleTag.png");
+                    String lang = ShopMod.getSupportedLanguage();
+                    rugForSaleImg = ImageMaster.loadImage("img/shop/"+lang+"/rugForSaleTag.png");
                 }
                 sb.setColor(Color.WHITE);
                 // Note: sb.draw with scale is fundamentally broken when putting Settings.scale into the forSaleScale,

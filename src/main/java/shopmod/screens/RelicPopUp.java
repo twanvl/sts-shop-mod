@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 
 import shopmod.relics.MerchantsRug;
@@ -27,11 +28,12 @@ public class RelicPopUp {
     private Hitbox hbBot = new Hitbox(HB_W, HB_H);
     private float x;
     private float y;
-    private static final String INFO_LABEL = "Inspect";
-    private static final String SELL_LABEL = "Sell";
-    public static final String[] SELL_MESSAGE = {"Sell this relic NL Obtain #b", " #ygold"};
-    private static final String CANT_SELL_LABEL = "Can't sell";
-    public static final String[] CANT_SELL_MESSAGE = {"This relic can not be sold."};
+    private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("shopmod:RelicPopUp");
+    private static final String INFO_LABEL = uiStrings.TEXT[0];
+    private static final String SELL_LABEL = uiStrings.TEXT[1];
+    public static final String[] SELL_MESSAGE = {uiStrings.TEXT[2],uiStrings.TEXT[3]};
+    private static final String CANT_SELL_LABEL = uiStrings.TEXT[4];
+    public static final String[] CANT_SELL_MESSAGE = {uiStrings.TEXT[5]};
 
     public void open(AbstractRelic relic) {
         AbstractDungeon.topPanel.selectPotionMode = false;

@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.TipHelper;
+import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -104,9 +105,9 @@ public class MerchantsRug extends CustomRelic {
     }
 
     // For use in PotionPopUp screen
-
-    public static final String SELL_LABEL = "Sell";
-    public static final String[] SELL_MESSAGE = {"Sell this potion NL Obtain #b", " #ygold"};
+    private static final UIStrings potionUiStrings = CardCrawlGame.languagePack.getUIString("shopmod:PotionPopUp");
+    public static final String SELL_LABEL = potionUiStrings.TEXT[0];
+    public static final String[] SELL_MESSAGE = {potionUiStrings.TEXT[1], potionUiStrings.TEXT[2]};
 
     public static void renderDiscardLabel(SpriteBatch sb, float x, float y, int slot, AbstractPotion potion) {
         if (canSell(slot,potion)) {
