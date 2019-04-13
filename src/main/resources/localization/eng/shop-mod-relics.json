@@ -1,9 +1,9 @@
 {
   "MerchantsRug": {
     "NAME": "Merchant's Rug",
-    "FLAVOR": "You bought it, now let them buy from you.",
+    "FLAVOR": "你把它买了下来，现在让他们从你这里买东西了。",
     "DESCRIPTIONS": [
-      "You can now sell potions and relics at the merchant."
+      "你能在商人那里卖出药水和遗物。"
     ]
   }
 }
