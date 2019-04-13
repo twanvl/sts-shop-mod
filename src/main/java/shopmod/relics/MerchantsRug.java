@@ -105,8 +105,8 @@ public class MerchantsRug extends CustomRelic {
 
     // For use in PotionPopUp screen
 
-    public static final String SELL_LABEL = "Sell";
-    public static final String[] SELL_MESSAGE = {"Sell this potion NL Obtain #b", " #ygold"};
+    public static final String SELL_LABEL = "卖出";
+    public static final String[] SELL_MESSAGE = {"卖出这瓶药水 NL 获得 #b", " #y金币"};
 
     public static void renderDiscardLabel(SpriteBatch sb, float x, float y, int slot, AbstractPotion potion) {
         if (canSell(slot,potion)) {
