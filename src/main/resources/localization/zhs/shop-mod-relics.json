@@ -1,0 +1,9 @@
+{
+  "MerchantsRug": {
+    "NAME": "Merchant's Rug",
+    "FLAVOR": "你把它买了下来，现在让他们从你这里买东西了。",
+    "DESCRIPTIONS": [
+      "你能在商人那里卖出药水和遗物。"
+    ]
+  }
+}

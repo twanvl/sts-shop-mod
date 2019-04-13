@@ -55,6 +55,8 @@ public class ShopMod implements
     }
     public static String getSupportedLanguage() {
         switch (Settings.language) {
+            case ZHS:
+                return "zhs";
             default:
                 return "eng";
         }

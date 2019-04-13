@@ -1,5 +1,6 @@
 ### v1.1.0
 * Make mod localizable
+* Simplified Chinese (zhs) translation, thanks to Rita-Bernstein.
 
 ### v1.0.3
 * Fix: correctly position relic popup if there are multiple pages of relics.
