@@ -1,3 +1,6 @@
+### v1.1.1
+* Fix crash with new version of the base game (patch 1.1)
+
 ### v1.1.0
 * Make mod localizable
 * Simplified Chinese (zhs) translation, thanks to Rita-Bernstein.

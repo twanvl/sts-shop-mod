@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -22,10 +23,10 @@ public class RelicPopUp {
     private AbstractRelic relic;
     public boolean isHidden = true;
     public boolean targetMode = false;
-    private static final float HB_W = 184.0f;
-    private static final float HB_H = 52.0f;
-    private Hitbox hbTop = new Hitbox(HB_W, HB_H);
-    private Hitbox hbBot = new Hitbox(HB_W, HB_H);
+    private Hitbox hbTop = new Hitbox(286.0f * Settings.scale, 120.0f * Settings.scale);
+    private Hitbox hbBot = new Hitbox(286.0f * Settings.scale, 90.0f * Settings.scale);
+    private Color topHoverColor = new Color(0.5f, 0.9f, 1.0f, 0.0f);
+    private Color botHoverColor = new Color(1.0f, 0.4f, 0.3f, 0.0f);
     private float x;
     private float y;
     private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("shopmod:RelicPopUp");
@@ -36,13 +37,15 @@ public class RelicPopUp {
     public static final String[] CANT_SELL_MESSAGE = {uiStrings.TEXT[5]};
 
     public void open(AbstractRelic relic) {
+        this.topHoverColor.a = 0.0f;
+        this.botHoverColor.a = 0.0f;
         AbstractDungeon.topPanel.selectPotionMode = false;
         this.relic = relic;
         this.x = relic.hb.cX;
-        this.y = relic.hb.cY - 144.0f * Settings.scale;
+        this.y = relic.hb.cY - 164.0f * Settings.scale;
         this.isHidden = false;
         this.hbTop.move(this.x, this.y + 44.0f * Settings.scale);
-        this.hbBot.move(this.x, this.y - 14.0f * Settings.scale);
+        this.hbBot.move(this.x, this.y - 76.0f * Settings.scale);
         this.hbTop.clickStarted = false;
         this.hbBot.clickStarted = false;
         this.hbTop.clicked = false;
@@ -118,28 +121,29 @@ public class RelicPopUp {
     public void render(SpriteBatch sb) {
         if (!this.isHidden) {
             sb.setColor(Color.WHITE);
-            sb.draw(ImageMaster.POTION_UI_SHADOW, this.x - 141.0f, this.y - 143.0f, 141.0f, 143.0f, 282.0f, 286.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 282, 286, false, false);
-            sb.draw(ImageMaster.POTION_UI_BG, this.x - 141.0f, this.y - 143.0f, 141.0f, 143.0f, 282.0f, 286.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 282, 286, false, false);
-            if (this.hbTop.hovered) {
-                sb.draw(ImageMaster.POTION_UI_TOP, this.x - 141.0f, this.y - 143.0f, 141.0f, 143.0f, 282.0f, 286.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 282, 286, false, false);
-            } else if (this.hbBot.hovered) {
-                sb.draw(ImageMaster.POTION_UI_MID, this.x - 141.0f, this.y - 143.0f, 141.0f, 143.0f, 282.0f, 286.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 282, 286, false, false);
-            }
-            sb.draw(ImageMaster.POTION_UI_OVERLAY, this.x - 141.0f, this.y - 143.0f, 141.0f, 143.0f, 282.0f, 286.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 282, 286, false, false);
-            Color c = Color.SKY;
+            sb.draw(ImageMaster.POTION_UI_BG, this.x - 200.0f, this.y - 169.0f, 200.0f, 169.0f, 400.0f, 338.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 400, 338, false, false);
+            this.topHoverColor.a = this.hbTop.hovered ? 0.5f : MathHelper.fadeLerpSnap(this.topHoverColor.a, 0.0f);
+            this.botHoverColor.a = this.hbBot.hovered ? 0.5f : MathHelper.fadeLerpSnap(this.botHoverColor.a, 0.0f);
+            sb.setBlendFunction(770, 1);
+            sb.setColor(this.topHoverColor);
+            sb.draw(ImageMaster.POTION_UI_TOP, this.x - 200.0f, this.y - 169.0f, 200.0f, 169.0f, 400.0f, 338.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 400, 338, false, false);
+            sb.setColor(this.botHoverColor);
+            sb.draw(ImageMaster.POTION_UI_BOT, this.x - 200.0f, this.y - 169.0f, 200.0f, 169.0f, 400.0f, 338.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 400, 338, false, false);
+            sb.setBlendFunction(770, 771);
+            Color c = Settings.CREAM_COLOR;
             if (!MerchantsRug.canSell(relic)) {
                 c = Color.GRAY;
             }
-            FontHelper.renderFontCenteredWidth(sb, FontHelper.topPanelInfoFont, INFO_LABEL, this.x, this.y + 55.0f * Settings.scale, Settings.CREAM_COLOR);
-            FontHelper.renderFontCenteredWidth(sb, FontHelper.topPanelInfoFont, SELL_LABEL, this.x, this.y - 2.0f * Settings.scale, c);
+            FontHelper.renderFontCenteredWidth(sb, FontHelper.buttonLabelFont, INFO_LABEL, this.x, this.hbTop.cY + 4.0f * Settings.scale, Settings.CREAM_COLOR);
+            FontHelper.renderFontCenteredWidth(sb, FontHelper.buttonLabelFont, SELL_LABEL, this.x, this.hbBot.cY + 12 * Settings.scale, c);
             this.hbTop.render(sb);
             this.hbBot.render(sb);
             if (this.hbBot.hovered) {
-                float tipX = this.x > Settings.WIDTH * 0.75f ? this.x - (124.0f + 320.0f) * Settings.scale : this.x + 124.0f * Settings.scale;
+                float tipX = this.x > Settings.WIDTH * 0.75f ? this.x - 174.0f * Settings.scale : this.x + 174.0f * Settings.scale;
                 if (MerchantsRug.canSell(relic)) {
-                    TipHelper.renderGenericTip(tipX, this.y + 50.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + MerchantsRug.relicSalePrice(relic) + SELL_MESSAGE[1]);
+                    TipHelper.renderGenericTip(tipX, this.y + 20.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + MerchantsRug.relicSalePrice(relic) + SELL_MESSAGE[1]);
                 } else {
-                    TipHelper.renderGenericTip(tipX, this.y + 50.0f * Settings.scale, CANT_SELL_LABEL, CANT_SELL_MESSAGE[0]);
+                    TipHelper.renderGenericTip(tipX, this.y + 20.0f * Settings.scale, CANT_SELL_LABEL, CANT_SELL_MESSAGE[0]);
                 }
             }
         }

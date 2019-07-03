@@ -23,11 +23,11 @@ public class PotionPopUpPatch {
                 public void edit(MethodCall m) throws CannotCompileException {
                     if (m.getMethodName().equals("renderFontCenteredWidth")) {
                         if (rfcw++ == 1) {
-                            m.replace(" shopmod.relics.MerchantsRug.renderDiscardLabel(sb, this.x, this.y, this.slot, this.potion); ");
+                            m.replace(" shopmod.relics.MerchantsRug.renderDiscardLabel($$, this.slot, this.potion); ");
                         }
                     } else if (m.getMethodName().equals("renderGenericTip")) {
                         if (rgt++ == 2) {
-                            m.replace(" shopmod.relics.MerchantsRug.renderDiscardLabelTip(this.x, this.y, this.slot, this.potion); ");
+                            m.replace(" shopmod.relics.MerchantsRug.renderDiscardLabelTip($$, this.slot, this.potion); ");
                         }
                     }
                 }

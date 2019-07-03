@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -109,18 +110,18 @@ public class MerchantsRug extends CustomRelic {
     public static final String SELL_LABEL = potionUiStrings.TEXT[0];
     public static final String[] SELL_MESSAGE = {potionUiStrings.TEXT[1], potionUiStrings.TEXT[2]};
 
-    public static void renderDiscardLabel(SpriteBatch sb, float x, float y, int slot, AbstractPotion potion) {
+    public static void renderDiscardLabel(SpriteBatch sb, BitmapFont font, String msg, float x, float y, Color c, int slot, AbstractPotion potion) {
         if (canSell(slot,potion)) {
-            FontHelper.renderFontCenteredWidth(sb, FontHelper.topPanelInfoFont, SELL_LABEL, x, y - 2.0f * Settings.scale, Color.SKY);
+            FontHelper.renderFontCenteredWidth(sb, font, SELL_LABEL, x, y, Settings.CREAM_COLOR);
         } else {
-            FontHelper.renderFontCenteredWidth(sb, FontHelper.topPanelInfoFont, PotionPopUp.TEXT[2], x, y - 2.0f * Settings.scale, Color.SALMON);
+            FontHelper.renderFontCenteredWidth(sb, font, msg, x, y, c);
         }
     }
-    public static void renderDiscardLabelTip(float x, float y, int slot, AbstractPotion potion) {
+    public static void renderDiscardLabelTip(float x, float y, String header, String body, int slot, AbstractPotion potion) {
         if (canSell(slot,potion)) {
-            TipHelper.renderGenericTip(x + 124.0f * Settings.scale, y + 50.0f * Settings.scale, SELL_LABEL, SELL_MESSAGE[0] + potionSalePrice(slot,potion) + SELL_MESSAGE[1]);
+            TipHelper.renderGenericTip(x, y, SELL_LABEL, SELL_MESSAGE[0] + potionSalePrice(slot,potion) + SELL_MESSAGE[1]);
         } else {
-            TipHelper.renderGenericTip(x + 124.0f * Settings.scale, y + 50.0f * Settings.scale, PotionPopUp.LABEL[2], PotionPopUp.MSG[2]);
+            TipHelper.renderGenericTip(x, y, header, body);
         }
     }
 
