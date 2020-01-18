@@ -46,6 +46,7 @@ public class ShopScreenPatch {
 
     @SpirePatch(clz = ShopScreen.class, method = "update")
     public static class Update {
+        @SuppressWarnings("rawtypes")
         public static SpireReturn Prefix(ShopScreen self) {
             // Note: do this before ShopScreen.updateCards, to make it possible to cancel clicks
             MerchantsRug.relicPopUp.update();

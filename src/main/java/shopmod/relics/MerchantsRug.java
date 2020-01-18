@@ -43,7 +43,6 @@ import com.megacrit.cardcrawl.relics.Waffle;
 import com.megacrit.cardcrawl.relics.WarPaint;
 import com.megacrit.cardcrawl.relics.WarpedTongs;
 import com.megacrit.cardcrawl.relics.Whetstone;
-import com.megacrit.cardcrawl.ui.panels.PotionPopUp;
 
 import basemod.ReflectionHacks;
 import basemod.abstracts.CustomRelic;
