@@ -4,7 +4,7 @@
   "author_list": ["twanvl"],
   "credits": "translation: Rita-B",
   "description": "Modifies the merchant's shop, allowing you to buy more items.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "sts_version": "07-01-2019",
   "mts_version": "3.0.0",
   "dependencies": ["basemod"],

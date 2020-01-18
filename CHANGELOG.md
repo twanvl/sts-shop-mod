@@ -1,3 +1,6 @@
+### v1.1.2
+* Minor fixes, flavor update
+
 ### v1.1.1
 * Fix crash with new version of the base game (patch 1.1)
 

@@ -3,7 +3,7 @@
 
   <groupId>shopmod</groupId>
   <artifactId>ShopMod</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 
   <name>ShopMod</name>
   <description>Modifies the merchant's shop, allowing you to buy more items.</description>
